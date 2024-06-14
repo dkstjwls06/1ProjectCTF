@@ -1,0 +1,23 @@
+ARG IMAGE
+FROM $IMAGE
+
+ARG APT_OLD
+RUN /bin/bash -c \
+        'if [ $APT_OLD -eq 1 ]  ; then sed -i -re "s/([a-z]{2}.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list ; fi'
+
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt update -y > /dev/null
+RUN apt upgrade -y > /dev/null
+RUN apt install xinetd -y > /dev/null
+
+#custom install
+
+
+#end
+
+ARG USER
+ARG TIMEOUT
+ARG EXEC
+RUN useradd -ms /bin/bash $USER
+ADD ./share /home /$USER
+RUN echo "#!/bin/bash\ntimeout $TIMEOUT /home/$USER/$EXEC" \ > /home/$USER/run.sh

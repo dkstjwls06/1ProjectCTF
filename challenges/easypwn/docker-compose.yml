@@ -1,0 +1,16 @@
+
+services:
+  easypwn:
+    container_name: easypwn
+    build:
+      context: easypwn
+      args:
+        IMAGE: ubuntu:20.04
+        USER: easypwn
+        TIMEOUT: 60
+        EXEC: easypwn
+        SERVICE: easypwn
+        APT_OLD: 0
+    ports:
+       - "10001:10001"
+    restart: always
